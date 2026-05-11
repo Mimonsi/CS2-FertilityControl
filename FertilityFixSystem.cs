@@ -68,6 +68,71 @@ namespace FertilityControl
             Dependency = handle;
         }
 
+        public enum ResourceKind
+        {
+            Fertility = 0,
+            Ore = 1,
+            Oil = 2,
+        }
+
+        public void RestoreResource(ResourceKind kind) => ScheduleOneShot(kind, restore: true);
+
+        public void DepleteResource(ResourceKind kind) => ScheduleOneShot(kind, restore: false);
+
+        private void ScheduleOneShot(ResourceKind kind, bool restore)
+        {
+            if (m_NaturalResourceSystem == null)
+            {
+                return;
+            }
+
+            JobHandle inDeps;
+            CellMapData<NaturalResourceCell> data = m_NaturalResourceSystem.GetData(false, out inDeps);
+
+            var job = new OneShotJob
+            {
+                m_CellData = data,
+                m_Kind = (int)kind,
+                m_Restore = restore ? (byte)1 : (byte)0,
+            };
+
+            JobHandle handle = job.Schedule(
+                data.m_TextureSize.x * data.m_TextureSize.y,
+                64,
+                JobHandle.CombineDependencies(inDeps, Dependency));
+
+            m_NaturalResourceSystem.AddWriter(handle);
+            Dependency = handle;
+        }
+
+        [BurstCompile]
+        private struct OneShotJob : IJobParallelFor
+        {
+            public CellMapData<NaturalResourceCell> m_CellData;
+            public int m_Kind;
+            public byte m_Restore;
+
+            public void Execute(int index)
+            {
+                NaturalResourceCell cell = m_CellData.m_Buffer[index];
+
+                switch (m_Kind)
+                {
+                    case 0: // Fertility
+                        cell.m_Fertility.m_Used = m_Restore != 0 ? (ushort)0 : cell.m_Fertility.m_Base;
+                        break;
+                    case 1: // Ore
+                        cell.m_Ore.m_Used = m_Restore != 0 ? (ushort)0 : cell.m_Ore.m_Base;
+                        break;
+                    case 2: // Oil
+                        cell.m_Oil.m_Used = m_Restore != 0 ? (ushort)0 : cell.m_Oil.m_Base;
+                        break;
+                }
+
+                m_CellData.m_Buffer[index] = cell;
+            }
+        }
+
         [BurstCompile]
         private struct BoostJob : IJobParallelFor
         {

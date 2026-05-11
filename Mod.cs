@@ -11,6 +11,8 @@ namespace FertilityControl
         public static ILog log = LogManager.GetLogger($"{nameof(FertilityControl)}.{nameof(Mod)}")
             .SetShowsErrorsInUI(false);
 
+        public static FertilityFixSystem System { get; private set; }
+
         private Setting m_Setting;
 
         public void OnLoad(UpdateSystem updateSystem)
@@ -28,7 +30,8 @@ namespace FertilityControl
             AssetDatabase.global.LoadSettings(nameof(FertilityControl), m_Setting, new Setting(this));
 
             updateSystem.UpdateAt<FertilityFixSystem>(SystemUpdatePhase.GameSimulation);
-            updateSystem.World.GetOrCreateSystemManaged<FertilityFixSystem>().SetSetting(m_Setting);
+            System = updateSystem.World.GetOrCreateSystemManaged<FertilityFixSystem>();
+            System.SetSetting(m_Setting);
         }
 
         public void OnDispose()
@@ -39,6 +42,7 @@ namespace FertilityControl
                 m_Setting.UnregisterInOptionsUI();
                 m_Setting = null;
             }
+            System = null;
         }
     }
 }
