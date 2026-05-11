@@ -8,18 +8,29 @@
 	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
 	<!--LongDescription Value="This is a long description" /-->
 	<LongDescription>
-		In the base game, using specialized industry like farms depletes the terrain fertility, it can't regenerate fast enough for continous use.
+## Fertility Control
+In the base game, using specialized industry like farms depletes the terrain fertility, it can't regenerate fast enough for continous use.
 
-		This mod adds settings to increase the fertility by a set value. It also allows to make ore and oil regenerate.
+This mod adds settings to increase the fertility by a set value. It also allows to make ore and oil regenerate.
+		
+### Features
+- Restore all fertility of the map (fertility, ore, oil)
+- Deplete all fertility of the map (fertility, ore, oil)
+- Automatically restore fertility over time, with a slider to control the speed of regeneration
+- Enable automatic restoration of ore and oil over time, which only exists in Easy Mode per default
+		
+## Credits
+- Recycle icons created by Freepik - Flaticon
+- Background Wallpaper by **MaetzGer**
 	</LongDescription>
 	<!--Thumbnail-->
-	<Thumbnail Value="Properties/Thumbnail.png" />
+	<Thumbnail Value="Properties/FertilityControl.png" />
 	<!--Screenshot, can be set multiple times-->
-	<Screenshot Value="" />
+	<Screenshot Value="Properties/FertilityControl.png" />
 	<!--Tag, can be set multiple times-->
-	<Tag Value="" />
+	<Tag Value="Code Mod" />
 	<!--Link to the forum post where the mod can be discussed-->
-	<ForumLink Value="" />
+	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/fertility-control.1922129/" />
 	<!--Version of the mod-->
 	<ModVersion Value="1.1.0" />
 	<!--Recommended version of the base game to use the mod-->
