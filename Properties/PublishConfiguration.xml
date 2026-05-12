@@ -26,13 +26,13 @@ This mod adds settings to increase the fertility by a set value. It also allows 
 	<!--Thumbnail-->
 	<Thumbnail Value="Properties/FertilityControl.png" />
 	<!--Screenshot, can be set multiple times-->
-	<Screenshot Value="Properties/FertilityControl.png" />
+	<Screenshot Value="Properties/Settings.jpg" />
 	<!--Tag, can be set multiple times-->
 	<Tag Value="Code Mod" />
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/fertility-control.1922129/" />
 	<!--Version of the mod-->
-	<ModVersion Value="1.1.0" />
+	<ModVersion Value="1.2.0" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.5.8*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -41,10 +41,14 @@ This mod adds settings to increase the fertility by a set value. It also allows 
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Add buttons to restore/deplete fertility
+- Make all sliders use percentages instead of absolute values, and update the description accordingly
+- Add default values for easy mode to descriptions
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
-	<ExternalLink Type="" Url="" />
+	<ExternalLink Type="github" Url="https://github.com/Mimonsi/CS2-LodControl" />
+	<ExternalLink Type="discord" Url="https://discord.gg/vd7HXnpPJf" />
+	<ExternalLink Type="paypal" Url="https://www.paypal.com/paypalme/KonstantinSchwarze" />
+	<ExternalLink Type="kofi" Url="https://ko-fi.com/mimonsi" />
 	<!--Supported values Public, Private, Unlisted-->
-	<AccessLevel Value="Unlisted" />
+	<AccessLevel Value="Public" />
 </Publish>
