@@ -24,20 +24,20 @@ namespace FertilityControl
         }
 
         [SettingsUISection(kSection, kFertilityGroup)]
-        [SettingsUISlider(min = 0, max = 1000, step = 25, scalarMultiplier = 1, unit = Unit.kInteger)]
-        public int FertilityBonusRate { get; set; } = 200;
+        [SettingsUISlider(min = 0f, max = 100f, step = 1f, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        public float FertilityPercentPerDay { get; set; } = 20f;
 
         [SettingsUISection(kSection, kNonRenewableGroup)]
         public bool EnableOreOilRegen { get; set; } = false;
 
         [SettingsUISection(kSection, kNonRenewableGroup)]
         [SettingsUIHideByCondition(typeof(Setting), nameof(IsOreOilDisabled))]
-        [SettingsUISlider(min = 0f, max = 10f, step = 1f, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUISlider(min = 0f, max = 100f, step = 1f, scalarMultiplier = 1, unit = Unit.kPercentage)]
         public float OrePercentPerDay { get; set; } = 0f;
 
         [SettingsUISection(kSection, kNonRenewableGroup)]
         [SettingsUIHideByCondition(typeof(Setting), nameof(IsOreOilDisabled))]
-        [SettingsUISlider(min = 0f, max = 10f, step = 1f, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        [SettingsUISlider(min = 0f, max = 100f, step = 1f, scalarMultiplier = 1, unit = Unit.kPercentage)]
         public float OilPercentPerDay { get; set; } = 0f;
 
         [SettingsUIButton]
@@ -95,7 +95,7 @@ namespace FertilityControl
 
         public override void SetDefaults()
         {
-            FertilityBonusRate = 200;
+            FertilityPercentPerDay = 20f;
             EnableOreOilRegen = false;
             OrePercentPerDay = 0f;
             OilPercentPerDay = 0f;
@@ -123,28 +123,28 @@ namespace FertilityControl
                 { m_Setting.GetOptionGroupLocaleID(Setting.kNonRenewableGroup), "Non-Renewable Resources" },
                 { m_Setting.GetOptionGroupLocaleID(Setting.kActionsGroup), "Actions" },
 
-                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.FertilityBonusRate)), "Fertility regeneration bonus" },
+                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.FertilityPercentPerDay)), "Fertility regeneration bonus (% per day)" },
                 {
-                    m_Setting.GetOptionDescLocaleID(nameof(Setting.FertilityBonusRate)),
-                    "Extra fertility regen per tick on top of the vanilla 25. Default 200 keeps active farms healthy long-term. Pollution still slowly degrades fields."
+                    m_Setting.GetOptionDescLocaleID(nameof(Setting.FertilityPercentPerDay)),
+                    "Extra fertility regen per in-game day, on top of the vanilla baseline (~8% per day on a max-fertility cell). Default: 20%. At 20% bonus a fully drained cell recovers in roughly 3–4 days. Set to 0 to disable. Pollution still slowly degrades fields."
                 },
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.EnableOreOilRegen)), "Regenerate ore & oil" },
                 {
                     m_Setting.GetOptionDescLocaleID(nameof(Setting.EnableOreOilRegen)),
-                    "If enabled, ore and oil deposits slowly refill as in Easy mode, regardless of the current game mode."
+                    "If enabled, ore and oil deposits slowly refill as in Easy mode, regardless of the current game mode. Default: off."
                 },
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.OrePercentPerDay)), "Ore regeneration (% per day)" },
                 {
                     m_Setting.GetOptionDescLocaleID(nameof(Setting.OrePercentPerDay)),
-                    "Percent of a cell's maximum ore deposit that refills each in-game day."
+                    "Percent of a cell's maximum ore deposit that refills each in-game day. Default: 0% (no refill). Default for Easy Mode: 6%. At 1% per day a fully drained deposit recovers in 100 days."
                 },
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.OilPercentPerDay)), "Oil regeneration (% per day)" },
                 {
                     m_Setting.GetOptionDescLocaleID(nameof(Setting.OilPercentPerDay)),
-                    "Percent of a cell's maximum oil deposit that refills each in-game day."
+                    "Percent of a cell's maximum oil deposit that refills each in-game day. Default: 0% (no refill). Default for Easy Mode: 6%. At 1% per day a fully drained deposit recovers in 100 days."
                 },
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.RestoreFertilityButton)), "Restore full fertility" },

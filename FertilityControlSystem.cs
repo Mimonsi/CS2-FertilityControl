@@ -39,10 +39,10 @@ namespace FertilityControl
                 return;
             }
 
-            int fertilityBonus = math.max(0, m_Setting.FertilityBonusRate);
+            float fertilityPercent = math.max(0f, m_Setting.FertilityPercentPerDay);
             bool oreOilEnabled = m_Setting.EnableOreOilRegen;
 
-            if (fertilityBonus == 0 && !oreOilEnabled)
+            if (fertilityPercent <= 0f && !oreOilEnabled)
             {
                 return;
             }
@@ -53,7 +53,7 @@ namespace FertilityControl
             var job = new BoostJob
             {
                 m_CellData = data,
-                m_FertilityBonus = fertilityBonus,
+                m_FertilityPerTick = fertilityPercent / 100f * kPerTickDayFraction,
                 m_OreOilEnabled = oreOilEnabled ? (byte)1 : (byte)0,
                 m_OrePerTick = m_Setting.OrePercentPerDay / 100f * kPerTickDayFraction,
                 m_OilPerTick = m_Setting.OilPercentPerDay / 100f * kPerTickDayFraction,
@@ -137,7 +137,7 @@ namespace FertilityControl
         private struct BoostJob : IJobParallelFor
         {
             public CellMapData<NaturalResourceCell> m_CellData;
-            public int m_FertilityBonus;
+            public float m_FertilityPerTick;
             public byte m_OreOilEnabled;
             public float m_OrePerTick;
             public float m_OilPerTick;
@@ -146,9 +146,10 @@ namespace FertilityControl
             {
                 NaturalResourceCell cell = m_CellData.m_Buffer[index];
 
-                if (m_FertilityBonus > 0)
+                if (m_FertilityPerTick > 0f)
                 {
-                    int used = math.max(0, (int)cell.m_Fertility.m_Used - m_FertilityBonus);
+                    float drop = (float)cell.m_Fertility.m_Base * m_FertilityPerTick;
+                    int used = (int)math.max(0f, (float)cell.m_Fertility.m_Used - drop);
                     cell.m_Fertility.m_Used = (ushort)math.min(used, (int)cell.m_Fertility.m_Base);
                 }
 
