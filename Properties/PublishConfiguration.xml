@@ -9,13 +9,13 @@
 	<!--LongDescription Value="This is a long description" /-->
 	<LongDescription>
 ## Fertility Control
-In the base game, using specialized industry like farms depletes the terrain fertility, it can't regenerate fast enough for continous use.
+In the base game, using specialized industry like farms depletes the terrain fertility, it can't regenerate fast enough for continuous use.
 
 This mod adds settings to increase the fertility by a set value. It also allows to make ore and oil regenerate.
 		
 ### Features
-- Restore all fertility of the map (fertility, ore, oil)
-- Deplete all fertility of the map (fertility, ore, oil)
+- Restore all fertility of the map (fertility, ore, oil, fish)
+- Deplete all fertility of the map (fertility, ore, oil, fish)
 - Automatically restore fertility over time, with a slider to control the speed of regeneration
 - Enable automatic restoration of ore and oil over time, which only exists in Easy Mode per default
 		
@@ -32,20 +32,19 @@ This mod adds settings to increase the fertility by a set value. It also allows 
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/fertility-control.1922129/" />
 	<!--Version of the mod-->
-	<ModVersion Value="1.2.0" />
+	<ModVersion Value="1.3.0" />
 	<!--Recommended version of the base game to use the mod-->
-	<GameVersion Value="1.5.8*" />
+	<GameVersion Value="1.6.0*" />
 	<!--Dependency for the mod, can be set multiple times-->
 	<Dependency Id="" />
 	<!--Required DLC, can be set multiple times. Supported values are "Landmark Buildings", "San Fransisco Set", "Beach Properties", "Urban Promenades", "Modern Architecture"-->
 	<RequiredDLC Value="" />
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 <ChangeLog>
-- Make all sliders use percentages instead of absolute values, and update the description accordingly
-- Add default values for easy mode to descriptions
+- Add fish resource to the mod
 </ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
-	<ExternalLink Type="github" Url="https://github.com/Mimonsi/CS2-LodControl" />
+	<ExternalLink Type="github" Url="https://github.com/Mimonsi/CS2-FertilityControl" />
 	<ExternalLink Type="discord" Url="https://discord.gg/vd7HXnpPJf" />
 	<ExternalLink Type="paypal" Url="https://www.paypal.com/paypalme/KonstantinSchwarze" />
 	<ExternalLink Type="kofi" Url="https://ko-fi.com/mimonsi" />

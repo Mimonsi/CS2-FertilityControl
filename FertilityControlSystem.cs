@@ -40,9 +40,10 @@ namespace FertilityControl
             }
 
             float fertilityPercent = math.max(0f, m_Setting.FertilityPercentPerDay);
+            float fishPercent = math.max(0f, m_Setting.FishPercentPerDay);
             bool oreOilEnabled = m_Setting.EnableOreOilRegen;
 
-            if (fertilityPercent <= 0f && !oreOilEnabled)
+            if (fertilityPercent <= 0f && fishPercent <= 0f && !oreOilEnabled)
             {
                 return;
             }
@@ -54,6 +55,7 @@ namespace FertilityControl
             {
                 m_CellData = data,
                 m_FertilityPerTick = fertilityPercent / 100f * kPerTickDayFraction,
+                m_FishPerTick = fishPercent / 100f * kPerTickDayFraction,
                 m_OreOilEnabled = oreOilEnabled ? (byte)1 : (byte)0,
                 m_OrePerTick = m_Setting.OrePercentPerDay / 100f * kPerTickDayFraction,
                 m_OilPerTick = m_Setting.OilPercentPerDay / 100f * kPerTickDayFraction,
@@ -73,6 +75,7 @@ namespace FertilityControl
             Fertility = 0,
             Ore = 1,
             Oil = 2,
+            Fish = 3,
         }
 
         public void RestoreResource(ResourceKind kind) => ScheduleOneShot(kind, restore: true);
@@ -127,6 +130,9 @@ namespace FertilityControl
                     case 2: // Oil
                         cell.m_Oil.m_Used = m_Restore != 0 ? (ushort)0 : cell.m_Oil.m_Base;
                         break;
+                    case 3: // Fish
+                        cell.m_Fish.m_Used = m_Restore != 0 ? (ushort)0 : cell.m_Fish.m_Base;
+                        break;
                 }
 
                 m_CellData.m_Buffer[index] = cell;
@@ -138,6 +144,7 @@ namespace FertilityControl
         {
             public CellMapData<NaturalResourceCell> m_CellData;
             public float m_FertilityPerTick;
+            public float m_FishPerTick;
             public byte m_OreOilEnabled;
             public float m_OrePerTick;
             public float m_OilPerTick;
@@ -151,6 +158,13 @@ namespace FertilityControl
                     float drop = (float)cell.m_Fertility.m_Base * m_FertilityPerTick;
                     int used = (int)math.max(0f, (float)cell.m_Fertility.m_Used - drop);
                     cell.m_Fertility.m_Used = (ushort)math.min(used, (int)cell.m_Fertility.m_Base);
+                }
+
+                if (m_FishPerTick > 0f)
+                {
+                    float drop = (float)cell.m_Fish.m_Base * m_FishPerTick;
+                    int used = (int)math.max(0f, (float)cell.m_Fish.m_Used - drop);
+                    cell.m_Fish.m_Used = (ushort)math.min(used, (int)cell.m_Fish.m_Base);
                 }
 
                 if (m_OreOilEnabled != 0)

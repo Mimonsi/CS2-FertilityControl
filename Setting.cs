@@ -9,13 +9,14 @@ using System.Collections.Generic;
 namespace FertilityControl
 {
     [FileLocation(nameof(FertilityControl))]
-    [SettingsUIGroupOrder(kFertilityGroup, kNonRenewableGroup, kActionsGroup, kActionsGroup)]
-    [SettingsUIShowGroupName(kFertilityGroup, kNonRenewableGroup, kActionsGroup, kActionsGroup)]
+    [SettingsUIGroupOrder(kFertilityGroup, kFishGroup, kNonRenewableGroup, kActionsGroup)]
+    [SettingsUIShowGroupName(kFertilityGroup, kFishGroup, kNonRenewableGroup, kActionsGroup)]
     public class Setting : ModSetting
     {
         public const string kSection = "Main";
 
         public const string kFertilityGroup = "Fertility";
+        public const string kFishGroup = "Fish";
         public const string kNonRenewableGroup = "NonRenewable";
         public const string kActionsGroup = "Actions";
 
@@ -26,6 +27,10 @@ namespace FertilityControl
         [SettingsUISection(kSection, kFertilityGroup)]
         [SettingsUISlider(min = 0f, max = 100f, step = 1f, scalarMultiplier = 1, unit = Unit.kPercentage)]
         public float FertilityPercentPerDay { get; set; } = 20f;
+
+        [SettingsUISection(kSection, kFishGroup)]
+        [SettingsUISlider(min = 0f, max = 100f, step = 1f, scalarMultiplier = 1, unit = Unit.kPercentage)]
+        public float FishPercentPerDay { get; set; } = 0f;
 
         [SettingsUISection(kSection, kNonRenewableGroup)]
         public bool EnableOreOilRegen { get; set; } = false;
@@ -91,11 +96,29 @@ namespace FertilityControl
             set { Mod.System?.DepleteResource(FertilityFixSystem.ResourceKind.Oil); }
         }
 
+        [SettingsUIButton]
+        [SettingsUISection(kSection, kActionsGroup)]
+        [SettingsUIButtonGroup("FishButtons")]
+        public bool RestoreFishButton
+        {
+            set { Mod.System?.RestoreResource(FertilityFixSystem.ResourceKind.Fish); }
+        }
+
+        [SettingsUIButton]
+        [SettingsUIConfirmation]
+        [SettingsUISection(kSection, kActionsGroup)]
+        [SettingsUIButtonGroup("FishButtons")]
+        public bool DepleteFishButton
+        {
+            set { Mod.System?.DepleteResource(FertilityFixSystem.ResourceKind.Fish); }
+        }
+
         public bool IsOreOilDisabled() => !EnableOreOilRegen;
 
         public override void SetDefaults()
         {
             FertilityPercentPerDay = 20f;
+            FishPercentPerDay = 0f;
             EnableOreOilRegen = false;
             OrePercentPerDay = 0f;
             OilPercentPerDay = 0f;
@@ -120,6 +143,7 @@ namespace FertilityControl
                 { m_Setting.GetOptionTabLocaleID(Setting.kSection), "Main" },
 
                 { m_Setting.GetOptionGroupLocaleID(Setting.kFertilityGroup), "Farmland Fertility" },
+                { m_Setting.GetOptionGroupLocaleID(Setting.kFishGroup), "Fish" },
                 { m_Setting.GetOptionGroupLocaleID(Setting.kNonRenewableGroup), "Non-Renewable Resources" },
                 { m_Setting.GetOptionGroupLocaleID(Setting.kActionsGroup), "Actions" },
 
@@ -127,6 +151,12 @@ namespace FertilityControl
                 {
                     m_Setting.GetOptionDescLocaleID(nameof(Setting.FertilityPercentPerDay)),
                     "Extra fertility regen per in-game day, on top of the vanilla baseline (~8% per day on a max-fertility cell). Default: 20%. At 20% bonus a fully drained cell recovers in roughly 3–4 days. Set to 0 to disable. Pollution still slowly degrades fields."
+                },
+
+                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.FishPercentPerDay)), "Fish regeneration bonus (% per day)" },
+                {
+                    m_Setting.GetOptionDescLocaleID(nameof(Setting.FishPercentPerDay)),
+                    "Extra fish regen per in-game day, on top of the vanilla baseline. Helps offset depletion from fishing harbors. Default: 0% (off). Note: the vanilla game already restores fish naturally in clean water, so a small bonus (5–10%) is usually enough."
                 },
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.EnableOreOilRegen)), "Regenerate ore & oil" },
@@ -193,6 +223,22 @@ namespace FertilityControl
                 {
                     m_Setting.GetOptionWarningLocaleID(nameof(Setting.DepleteOilButton)),
                     "This will drain all oil deposits across the entire map. Oil extractors will run dry. Continue?"
+                },
+
+                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.RestoreFishButton)), "Restore full fish" },
+                {
+                    m_Setting.GetOptionDescLocaleID(nameof(Setting.RestoreFishButton)),
+                    "Instantly refills every water cell's fish stock to its current maximum. The base stock still depends on water depth and pollution and is recalculated by the game each tick."
+                },
+
+                { m_Setting.GetOptionLabelLocaleID(nameof(Setting.DepleteFishButton)), "Deplete all fish" },
+                {
+                    m_Setting.GetOptionDescLocaleID(nameof(Setting.DepleteFishButton)),
+                    "Instantly drains every water cell's fish stock to zero. The game will recover fish naturally over time based on water quality."
+                },
+                {
+                    m_Setting.GetOptionWarningLocaleID(nameof(Setting.DepleteFishButton)),
+                    "This will drain all fish stocks across the entire map. Fishing harbors will run dry until water-based regeneration catches up. Continue?"
                 },
             };
         }
